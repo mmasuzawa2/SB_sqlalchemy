@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>detail</h1>
+
+{% block content %}
+
+{{user.first_name}}&nbsp;{{user.last_name}}<br>
+<img src="{{user.image_url}}" alt="none"><br>
+<a href="/update-user/{{user.id}}">Edit User</a> &nbsp; <a href="/delete/{{user.id}}">Delete User</a><br>
+
+
+<a href="/">back to home</a>
+
+{% endblock %}
+    
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>New Post</h1>
+    <form action="/post-form/{{user.id}}" method="POST">
+        <label for="title">enter title</label>
+        <input name="title" size = 50><br>
+        <textarea name="content" rows="4" cols="50">content</textarea><br>
+        <button type="submit">submit</button>
+    </form>
+</body>
+</html>

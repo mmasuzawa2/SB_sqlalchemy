@@ -13,8 +13,18 @@
 
 {{user.first_name}}&nbsp;{{user.last_name}}<br>
 <img src="{{user.image_url}}" alt="none"><br>
-<a href="/update-user/{{user.id}}">Edit User</a> &nbsp; <a href="/delete/{{user.id}}">Delete User</a><br>
+<a href="/update-user/{{user.id}}">Edit User</a> &nbsp; <a href="/delete/{{user.id}}">Delete User</a><br><br>
 
+<ul>
+{% for e in user.posts %}
+<li><a href="/post/{{e.id}}">{{e.title}}</a></li>
+{% endfor %}
+</ul>
+
+
+
+<br><br>
+<a href="/show-post-form/{{user.id}}">post something</a>
 
 <a href="/">back to home</a>
 

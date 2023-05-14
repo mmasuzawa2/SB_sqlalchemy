@@ -10,7 +10,12 @@
 <h1>{{post.title}}</h1>
 
 {{post.content}} <br><br>
-by:&nbsp;{{post.users.first_name}}&nbsp;{{post.users.last_name}}<br><br>
+by:&nbsp;{{post.users.first_name}}&nbsp;{{post.users.last_name}}<br><br><br>
+
+Tags:&nbsp;
+{% for t in tagList %}
+<a href="/find-post/{{t}}">{{t}}</a>&nbsp;&nbsp;
+{% endfor %} <br><br>
 
 <a href="/user/{{post.user_id}}">go back</a>&nbsp;<a href="/delete-post/{{post.id}}">delte post</a>
 

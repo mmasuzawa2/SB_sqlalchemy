@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h2>all posts with tag: {{tag.name}}</h2><br>
+
+<ul>
+    {% for e in postT %}
+        <li><a href="/post/{{e.posts.id}}">{{e.posts.title}}</a>  by {{e.posts.users.first_name}} {{e.posts.users.last_name}}</li>
+    {% endfor %}
+</ul>
+
+
+</body>
+</html>

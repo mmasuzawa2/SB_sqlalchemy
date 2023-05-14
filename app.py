@@ -2,7 +2,8 @@
 
 from flask import Flask, render_template, redirect, request
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, Users, Post
+from models import db, connect_db, Users, Post, PostTag, Tag
+from sqlalchemy import exc
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -99,13 +100,34 @@ def show_post_form(user_id):
 def handle_post(user):
     title = request.form["title"]
     content = request.form["content"]
+    tagsRaw = request.form["tag"]
+    if tagsRaw is not "":
+        tags = tagsRaw.split(",")
+    else:
+        tags = False
+
     userId = user
     title = str(title) if title else None
 
     post = Post(title=title,content=content,user_id=userId)
-
     db.session.add(post)
     db.session.commit()
+    
+    if tags:
+        for tName in tags:
+            try:
+                tag = Tag(name=tName)
+                db.session.add(tag)
+                db.session.commit()
+                postTag = PostTag(tag_id=tag.id,post_id=post.id)
+                db.session.add(postTag)
+                db.session.commit()
+            except exc.IntegrityError:
+                db.session.rollback()
+                tag = Tag.query.filter_by(name=tName).first()
+                postTag = PostTag(tag_id=tag.id,post_id=post.id)
+                db.session.add(postTag)
+                db.session.commit()
 
     return redirect(f'/user/{userId}')
 
@@ -113,14 +135,32 @@ def handle_post(user):
 @app.route("/post/<int:post_id>")
 def show_post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template("post-detail.html", post=post)
+    postT = post.posttag
+    tagL = [e.tags.name for e in postT]
+
+    return render_template("post-detail.html", post=post, tagList=tagL)
 
 
 @app.route("/delete-post/<int:post_id>")
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
 
+    PostTag.query.filter_by(post_id=post.id).delete()
     db.session.delete(post)
     db.session.commit()
 
     return redirect(f'/user/{post.user_id}')
+
+
+@app.route("/find-post/<tagname>")
+def find_post(tagname):  
+    tag = Tag.query.filter_by(name=tagname).first()
+    postT = tag.posttag
+    # titles = [e.posts.title for e in postT]
+
+    return render_template("tag-posts.html", postT=postT,tag=tag)
+
+
+    
+
+
